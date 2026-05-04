@@ -13,7 +13,7 @@ function Landing() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loading && user) navigate({ to: "/chat" });
+    if (!loading && user) navigate({ to: "/chat", search: { c: undefined } });
   }, [user, loading, navigate]);
 
   return (
@@ -36,7 +36,7 @@ function Landing() {
 
       <section className="container mx-auto px-6 pt-16 pb-24 text-center animate-fade-in">
         <div className="mx-auto inline-flex items-center gap-2 rounded-full glass px-3 py-1 text-xs text-muted-foreground">
-          <span className="h-1.5 w-1.5 rounded-full bg-primary glow" /> Powered by Lovable AI
+          <span className="h-1.5 w-1.5 rounded-full bg-primary glow" />sai likitha
         </div>
         <h1 className="mt-6 text-5xl font-bold tracking-tight md:text-7xl">
           The AI that <span className="gradient-text">learns from you</span>

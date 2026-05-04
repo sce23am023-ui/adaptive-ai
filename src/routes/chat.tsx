@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Send, Loader2, Sparkles } from "lucide-react";
 import { z } from "zod";
@@ -19,6 +19,14 @@ type Message = {
 
 export const Route = createFileRoute("/chat")({
   validateSearch: (s: Record<string, unknown>) => ({ c: typeof s.c === "string" ? s.c : undefined }),
+  beforeLoad: async ({ location }) => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      throw redirect({
+        to: "/auth",
+      });
+    }
+  },
   component: ChatPage,
 });
 

@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
@@ -10,6 +10,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export const Route = createFileRoute("/auth")({
+  beforeLoad: async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      throw redirect({
+        to: "/chat",
+        search: { c: undefined },
+      });
+    }
+  },
   component: AuthPage,
 });
 
@@ -27,7 +36,7 @@ function AuthPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (user) navigate({ to: "/chat" });
+    if (user) navigate({ to: "/chat", search: { c: undefined } });
   }, [user, navigate]);
 
   const submit = async (e: React.FormEvent) => {
@@ -46,7 +55,7 @@ function AuthPage() {
           options: { emailRedirectTo: `${window.location.origin}/chat` },
         });
         if (error) throw error;
-        toast.success("Account created! You're signed in.");
+        toast.success("Account created! Check your email to confirm and sign in.");
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;

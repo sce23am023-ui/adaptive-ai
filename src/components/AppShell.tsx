@@ -55,7 +55,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   const deleteConv = async (id: string) => {
     await supabase.from("conversations").delete().eq("id", id);
-    if (pathname === "/chat") navigate({ to: "/chat" });
+    if (pathname === "/chat") navigate({ to: "/chat", search: { c: undefined } });
   };
 
   const signOut = async () => {
